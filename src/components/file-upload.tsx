@@ -5,7 +5,7 @@ import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { UploadCloud, File, X, CheckCircle } from "lucide-react";
+import { UploadCloud, File, X } from "lucide-react";
 import { toastPopup } from "@/lib/toast";
 
 // Define accepted file types
@@ -21,11 +21,11 @@ export default function FileUpload({ onUploadComplete }) {
   const [files, setFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = useCallback((acceptedFiles: any) => {
     // Add new files to the state
     setFiles((prevFiles) => [
       ...prevFiles,
-      ...acceptedFiles.map((file) =>
+      ...acceptedFiles.map((file: Blob | MediaSource) =>
         Object.assign(file, { preview: URL.createObjectURL(file) })
       ),
     ]);
@@ -35,7 +35,7 @@ export default function FileUpload({ onUploadComplete }) {
     onDrop,
     accept: ACCEPTED_FILE_TYPES,
     maxSize: 10485760, // 10MB
-    onDropRejected: (rejectedFiles) => {
+    onDropRejected: () => {
       toastPopup("Please upload Excel files under 10MB.", "error");
     },
   });
